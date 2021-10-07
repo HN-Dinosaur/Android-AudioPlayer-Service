@@ -48,9 +48,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         init();
 
         toGetMusicListView();
-
-
-
     }
 
     void init(){
@@ -132,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //进度条停止
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                int progress=seekBar.getProgress();//获取seekBar的进度
+                int progress = seekBar.getProgress();//获取seekBar的进度
                 musicControl.seekTo(progress);//改变播放进度
             }
         });
@@ -165,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout,musicContentFragment);
         fragmentTransaction.commit();
+        //得到当前
         position = musicContentFragment.position;
         seekbarControl.setVisibility(View.VISIBLE);
         songControl.setVisibility(View.VISIBLE);
@@ -173,6 +171,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static void changeSong(int position){
         musicContentFragment.imageView.setImageResource(Constant.icons[position]);
         musicContentFragment.textView.setText(Constant.names[position]);
+        //释放原来的资源
+        musicControl.releasePlayer();
         musicControl.play(position);
         playOrPause.setImageResource(R.mipmap.pause);
         musicContentFragment.animator.start();
@@ -215,7 +215,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(musicType > 2){
                     musicType = 0;
                 }
-                System.out.println(musicType);
                 switch (musicType){
                     case 0:
                         musicStyle.setImageResource(R.mipmap.order);

@@ -8,8 +8,8 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,7 +17,6 @@ public class MusicService extends Service {
     private static final String LOG_TAG = "MusicTest";
     private MediaPlayer player;
     private Timer timer;
-    int position;
 
     public MusicService() {}
     @Override
@@ -33,27 +32,25 @@ public class MusicService extends Service {
             public void onCompletion(MediaPlayer mediaPlayer) {
                 //拿到音乐播放的类型
                 int type = MainActivity.musicType;
-                position = MainActivity.position;
                 int random = (int) (Math.random() * 3);
-                System.out.println(type);
                 switch (type){
                     //顺序播放
                     case 0:
-                        if(position < 2){
-                            position += 1;
+                        if(MainActivity.position < 2){
+                            MainActivity.position += 1;
                         }else{
-                            position = 0;
+                            MainActivity.position = 0;
                         }
-                        MainActivity.changeSong(position);
+                        MainActivity.changeSong(MainActivity.position);
                         break;
                         //随机播放
                     case 1:
-                        System.out.println(random);
-                        MainActivity.changeSong(random);
+                        MainActivity.position = random;
+                        MainActivity.changeSong(MainActivity.position);
                         break;
                         //单曲循环
                     case 2:
-                        MainActivity.changeSong(position);
+                        MainActivity.changeSong(MainActivity.position);
                         break;
                 }
             }
@@ -61,19 +58,19 @@ public class MusicService extends Service {
     }
 
     public void addTimer(){ //添加计时器用于设置音乐播放器中的播放进度条
-        if(timer==null){
-            timer=new Timer();//创建计时器对象
-            TimerTask task=new TimerTask() {
+        if(timer == null){
+            timer = new Timer();//创建计时器对象
+            TimerTask task = new TimerTask() {
                 @Override
                 public void run() {
                     if (player == null) return;
-                    int duration=player.getDuration();//获取歌曲总时长
-                    int currentPosition=player.getCurrentPosition();//获取播放进度
+                    int duration = player.getDuration();//获取歌曲总时长
+                    int currPosition = player.getCurrentPosition();//获取播放进度
                     Message msg = MainActivity.handler.obtainMessage();//创建消息对象
                     //将音乐的总时长和播放进度封装至消息对象中
-                    Bundle bundle=new Bundle();
+                    Bundle bundle = new Bundle();
                     bundle.putInt("duration",duration);
-                    bundle.putInt("currentPosition",currentPosition);
+                    bundle.putInt("currentPosition",currPosition);
                     msg.setData(bundle);
                     //将消息发送到主线程的消息队列
                     MainActivity.handler.sendMessage(msg);
@@ -107,6 +104,7 @@ public class MusicService extends Service {
             player.seekTo(progress);//设置音乐的播放位置
         }
         public boolean isPlay(){ return player.isPlaying(); }
+        public void releasePlayer(){ player.release(); }
 
 
     }

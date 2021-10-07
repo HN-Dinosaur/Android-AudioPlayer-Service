@@ -1,8 +1,6 @@
 package com.example.myandroidexperiment3;
 
 import android.animation.ObjectAnimator;
-import android.content.ComponentName;
-import android.content.ServiceConnection;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -53,6 +51,7 @@ public class MusicContentFragment extends Fragment {
                 activity.toGetMusicListView();
             }
         });
+
         animator = ObjectAnimator.ofFloat(imageView,"rotation",0f,360.0f);
         animator.setDuration(10000);//动画旋转一周的时间为10秒
         animator.setInterpolator(new LinearInterpolator());//匀速
