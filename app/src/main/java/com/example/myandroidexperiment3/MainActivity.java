@@ -171,8 +171,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static void changeSong(int position){
         musicContentFragment.imageView.setImageResource(Constant.icons[position]);
         musicContentFragment.textView.setText(Constant.names[position]);
-        //释放原来的资源
-        musicControl.releasePlayer();
         musicControl.play(position);
         playOrPause.setImageResource(R.mipmap.pause);
         musicContentFragment.animator.start();

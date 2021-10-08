@@ -104,9 +104,6 @@ public class MusicService extends Service {
             player.seekTo(progress);//设置音乐的播放位置
         }
         public boolean isPlay(){ return player.isPlaying(); }
-        public void releasePlayer(){ player.release(); }
-
-
     }
 
     @Override
